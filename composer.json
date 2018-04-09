@@ -1,5 +1,5 @@
 {
-    "name": "HadesArchitect/UnitedDomains",
+    "name": "hades-architect/united-domains",
     "description": "A library to use United Domains domainreselling.de API",
     "type": "library",
     "license": "MIT",
