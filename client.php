@@ -46,4 +46,4 @@ $response = $client->call('CheckDomain', ['domain' => 'ololo.com']); echo $respo
 $facadeClient = new \HadesArchitect\UnitedDomains\DnsFacadeClient($username, $password);
 
 // Get records in DNS zone
-var_dump($facadeClient->getRecords('oc-dev.de'));
+//var_dump($facadeClient->getRecords('my-domain.com'));
