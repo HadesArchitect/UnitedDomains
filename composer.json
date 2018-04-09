@@ -1,0 +1,23 @@
+{
+    "name": "HadesArchitect/UnitedDomains",
+    "description": "A library to use United Domains domainreselling.de API",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aleksandr Volochnev",
+            "email": "a.volochnev@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^5.5.9|>=7.0.8",
+        "guzzlehttp/guzzle": "~6.3",
+        "monolog/monolog": "1.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "7.*|6.*|~5.7"
+    },
+    "autoload": {
+        "psr-4": { "HadesArchitect\\UnitedDomains\\": "src" }
+    }
+}
