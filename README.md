@@ -47,3 +47,10 @@ When you would like to have it simpler
 $facadeClient = new \HadesArchitect\UnitedDomains\DnsFacadeClient($username, $password);
 var_dump($facadeClient->getRecords('my-domain.com'));
 ```
+
+## Todo
+
+- [ ] More tests
+- [ ] Integration with Travis CI
+- [ ] Better support for DNS Facade
+ 
