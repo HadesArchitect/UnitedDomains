@@ -7,7 +7,7 @@ A convenient tool to use United Domains API. It provides tools for direct API ca
 ## Installation
 
 ```
-composer require hades-architect/united-domains 0.2.0
+composer require hades-architect/united-domains 0.2.1
 ```
 
 ## Usage
