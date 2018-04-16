@@ -1,0 +1,5 @@
+language: php
+php:
+    - 7
+install: composer update --dev
+script: ./vendor/bin/phpunit --coverage-text
