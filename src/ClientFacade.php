@@ -6,11 +6,10 @@ use HadesArchitect\UnitedDomains\Exception\AmbiguousRecordException;
 use HadesArchitect\UnitedDomains\Exception\InvalidParameterException;
 use HadesArchitect\UnitedDomains\Exception\ServerException;
 
-class ClientFacade extends TraceableClient
+class ClientFacade extends TraceableClient implements ClientInterface
 {
     /**
-     * @param string $domain
-     * @return bool
+     * @inheritdoc
      */
     public function isDomainFree(string $domain): bool
     {
@@ -26,9 +25,7 @@ class ClientFacade extends TraceableClient
     }
 
     /**
-     * @param string $zone
-     * @param string $soamname
-     * @param string $soarname
+     * @inheritdoc
      */
     public function CreateDNSZone(string $zone, string $soamname = '', string $soarname = ''): void
     {
@@ -43,7 +40,7 @@ class ClientFacade extends TraceableClient
     }
 
     /**
-     * @param string $zone
+     * @inheritdoc
      */
     public function DeleteDNSZone(string $zone): void
     {
@@ -51,12 +48,7 @@ class ClientFacade extends TraceableClient
     }
 
     /**
-     * @param string $zone
-     * @param string $name
-     * @param string $type
-     * @param string $data
-     * @param int $ttl
-     * @param string $class
+     * @inheritdoc
      */
     public function addRecord(string $zone, string $name, string $type, string $data, int $ttl = 3600, string $class = 'IN')
     {
@@ -70,9 +62,7 @@ class ClientFacade extends TraceableClient
     }
 
     /**
-     * @param string $zone
-     * @param array $records
-     * @throws InvalidParameterException
+     * @inheritdoc
      */
     public function addRecords(string $zone, array $records)
     {
@@ -100,11 +90,7 @@ class ClientFacade extends TraceableClient
     }
 
     /**
-     * @param string $zone
-     * @param string $name
-     * @param string $type
-     * @param string|bool $data
-     * @param string $class
+     * @inheritdoc
      */
     public function deleteRecord(string $zone, string $name, string $type, $data = false, string $class = 'IN'): void
     {
@@ -134,8 +120,7 @@ class ClientFacade extends TraceableClient
     }
 
     /**
-     * @param string $zone
-     * @return array
+     * @inheritdoc
      */
     public function getRecords(string $zone)
     {
@@ -143,10 +128,7 @@ class ClientFacade extends TraceableClient
     }
 
     /**
-     * @param string $zone
-     * @param string $type
-     *
-     * @return array
+     * @inheritdoc
      */
     public function findRecordsByType(string $zone, string $type)
     {
@@ -171,11 +153,11 @@ class ClientFacade extends TraceableClient
                 preg_match_all("/(\S+)\s(\d+)\s(\S+)\s(\S+)\s(.*)/", $record, $matches);
 
                 return [
-                    'name' => $matches[1][0],
-                    'ttl' => (int)$matches[2][0],
+                    'name'  => $matches[1][0],
+                    'ttl'   => (int)$matches[2][0],
                     'class' => $matches[3][0],
-                    'type' => $matches[4][0],
-                    'data' => $matches[5][0]
+                    'type'  => $matches[4][0],
+                    'data'  => $matches[5][0]
                 ];
             },
             $this->call('QueryDNSZoneRRList', ['dnszone' => $zone])->getProperty('rr')

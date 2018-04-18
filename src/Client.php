@@ -4,14 +4,16 @@ namespace HadesArchitect\UnitedDomains;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Client as HTTPClient;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
+use HadesArchitect\UnitedDomains\Exception\ApiException;
 use HadesArchitect\UnitedDomains\Exception\InvalidResponseFormatException;
 use HadesArchitect\UnitedDomains\Exception\ServerException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 
-class Client
+class Client implements BaseClientInterface
 {
     /**
      * @var ClientInterface
@@ -23,7 +25,7 @@ class Client
      */
     protected $uri;
 
-    public function __construct($username, $password)
+    public function __construct($username, $password, ClientInterface $httpClient = null)
     {
         $this->uri = Uri::fromParts([
             'scheme' => 'https',
@@ -32,9 +34,16 @@ class Client
             'query' => sprintf('s_login=%s&s_pw=%s', $username, $password)
         ]);
 
-        $this->httpClient = new HTTPClient();
+        if (null === $httpClient) {
+            $httpClient = new HTTPClient();
+        }
+
+        $this->httpClient = $httpClient;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function call($method, array $properties = []): ResponseInterface
     {
         $query = sprintf(
@@ -44,7 +53,11 @@ class Client
             http_build_query($properties)
         );
 
-        $body = $this->doCall(new Request('get', $this->uri->withQuery($query)));
+        try {
+            $body = $this->doCall(new Request('get', $this->uri->withQuery($query)));
+        } catch (GuzzleException $guzzleException) {
+            throw new ApiException('An error occured during API call', 0, $guzzleException);
+        }
 
         $this->validateResponse($body);
 
@@ -59,6 +72,7 @@ class Client
 
     /**
      * @param RequestInterface $request
+     * @throws GuzzleException
      * @return string
      */
     protected function doCall(RequestInterface $request): string
